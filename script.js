@@ -23,11 +23,11 @@ function addBookToLibrary(title, author, year, pages, read) {
 
 Book.prototype.toggleRead = function () {
   switch (this.read) {
-    case true:
-      this.read = false;
+    case "Yes":
+      this.read = "No";
       break;
-    case false:
-      this.read = true;
+    case "No":
+      this.read = "Yes";
       break;
   }
 };
@@ -48,18 +48,21 @@ function renderBookCard(book) {
   bookCard.appendChild(bookPages);
   bookRead = document.createElement("h3");
   bookRead.innerHTML = "Book read? " + book.read;
+  bookRead.setAttribute("class", "read-book-text");
   bookCard.appendChild(bookRead);
   bookRemoveButton = document.createElement("button");
   bookRemoveButton.setAttribute("data-index", book.index);
+  bookRemoveButton.setAttribute("class", "remove-button");
   bookRemoveButton.innerHTML = "Remove from Library";
   bookCard.appendChild(bookRemoveButton);
   bookToogleReadButton = document.createElement("button");
-  //  bookRemoveButton.setAttribute("");
+  bookToogleReadButton.setAttribute("data-index", book.index);
+  bookToogleReadButton.setAttribute("class", "read-book");
   bookToogleReadButton.innerHTML = "Toggle Read";
   bookCard.appendChild(bookToogleReadButton);
   bookTable.appendChild(bookCard);
   bookCard
-    .querySelector(`[data-index="${bookCard.getAttribute("data-index")}"`)
+    .querySelector(".remove-button")
     .addEventListener("click", function (e) {
       for (i of myLibrary) {
         if (i.index == e.srcElement.dataset.index) {
@@ -74,6 +77,16 @@ function renderBookCard(book) {
         }
       }
     });
+  bookCard.querySelector(".read-book").addEventListener("click", function (e) {
+    for (i of myLibrary) {
+      if (i.index == e.srcElement.dataset.index) {
+        i.toggleRead();
+        document
+          .querySelector(`[data-index="${e.srcElement.dataset.index}"`)
+          .querySelector(".read-book-text").innerHTML = "Book read? " + i.read;
+      }
+    }
+  });
 }
 
 function showBookTable() {
