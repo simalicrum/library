@@ -41,7 +41,7 @@ function renderBookCard(book) {
   bookTitle.innerHTML = book.title;
   bookCard.appendChild(bookTitle);
   bookYear = document.createElement("h2");
-  bookYear.innerHTML = book.year;
+  bookYear.innerHTML = book.author + ", " + book.year;
   bookCard.appendChild(bookYear);
   bookPages = document.createElement("h3");
   bookPages.innerHTML = "Page count: " + book.pages;
