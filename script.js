@@ -18,7 +18,7 @@ function generateBookIndex() {
 }
 
 function addBookToLibrary(title, author, year, pages, read) {
-  return new Book(title, author, year, pages, read);
+  myLibrary.push(new Book(title, author, year, pages, read));
 }
 
 Book.prototype.toggleRead = function () {
@@ -32,70 +32,75 @@ Book.prototype.toggleRead = function () {
   }
 };
 
-function renderBookCard() {}
+function renderBookCard(book) {
+  let bookTable = document.getElementById("book-table");
+  bookCard = document.createElement("div");
+  bookCard.setAttribute("class", "book-card");
+  bookCard.setAttribute("data-index", book.index);
+  bookTitle = document.createElement("h1");
+  bookTitle.innerHTML = book.title;
+  bookCard.appendChild(bookTitle);
+  bookYear = document.createElement("h2");
+  bookYear.innerHTML = book.year;
+  bookCard.appendChild(bookYear);
+  bookPages = document.createElement("h3");
+  bookPages.innerHTML = "Page count: " + book.pages;
+  bookCard.appendChild(bookPages);
+  bookRead = document.createElement("h3");
+  bookRead.innerHTML = "Book read? " + book.read;
+  bookCard.appendChild(bookRead);
+  bookRemoveButton = document.createElement("button");
+  bookRemoveButton.setAttribute("data-index", book.index);
+  bookRemoveButton.innerHTML = "Remove from Library";
+  bookCard.appendChild(bookRemoveButton);
+  bookToogleReadButton = document.createElement("button");
+  //  bookRemoveButton.setAttribute("");
+  bookToogleReadButton.innerHTML = "Toggle Read";
+  bookCard.appendChild(bookToogleReadButton);
+  bookTable.appendChild(bookCard);
+  bookCard
+    .querySelector(`[data-index="${bookCard.getAttribute("data-index")}"`)
+    .addEventListener("click", function (e) {
+      for (i of myLibrary) {
+        if (i.index == e.srcElement.dataset.index) {
+          myLibrary.splice(myLibrary.indexOf(i), 1);
+          document
+            .getElementById("book-table")
+            .removeChild(
+              document.querySelector(
+                `[data-index="${e.srcElement.dataset.index}"`
+              )
+            );
+        }
+      }
+    });
+}
 
 function showBookTable() {
-  let bookTable = document.getElementById("book-table");
   for (book of myLibrary) {
-    bookCard = document.createElement("div");
-    bookCard.setAttribute("class", "book-card");
-    bookCard.setAttribute("data-index", book.index);
-    bookTitle = document.createElement("h1");
-    bookTitle.innerHTML = book.title;
-    bookCard.appendChild(bookTitle);
-    bookYear = document.createElement("h2");
-    bookYear.innerHTML = book.year;
-    bookCard.appendChild(bookYear);
-    bookPages = document.createElement("h3");
-    bookPages.innerHTML = book.pages;
-    bookCard.appendChild(bookPages);
-    bookRemoveButton = document.createElement("button");
-    bookRemoveButton.setAttribute("data-index", book.index);
-    bookRemoveButton.innerHTML = "Remove from Library";
-    bookCard.appendChild(bookRemoveButton);
-    bookTable.appendChild(bookCard);
-    bookCard
-      .querySelector(`[data-index="${bookCard.getAttribute("data-index")}"`)
-      .addEventListener("click", function (e) {
-        for (i of myLibrary) {
-          if (i.index == e.srcElement.dataset.index) {
-            myLibrary.splice(myLibrary.indexOf(i), 1);
-            document
-              .getElementById("book-table")
-              .removeChild(
-                document.querySelector(
-                  `[data-index="${e.srcElement.dataset.index}"`
-                )
-              );
-          }
-        }
-      });
+    renderBookCard(book);
   }
 }
 
-
-//document.getElementById("new-book").addEventListener("click", function () {
-//  document.getElementById("new-book-form").style.display = "block";
-//});
+document.getElementById("new-book").addEventListener("click", function () {
+  document.getElementById("new-book-form").style.display = "block";
+});
 
 document.getElementById("new-book-add").addEventListener("click", function (e) {
-  console.log(e);
-  console.log("Why?");
-  let newBook = addBookToLibrary(
+  addBookToLibrary(
     document.getElementById("title").value,
     document.getElementById("author").value,
     document.getElementById("year").value,
     document.getElementById("pages").value,
-    true
+    "No"
   );
-  myLibrary.push(newBook);
-  console.log(myLibrary);
-  showBookTable();
+  renderBookCard(myLibrary[myLibrary.length - 1]);
+  document.getElementById("new-book-form").style.display = "none";
 });
 
-myLibrary.push(addBookToLibrary("The Hobbit", "J.R.R. Tolkien", "1937", "310", false));
-myLibrary.push(addBookToLibrary("Dune", "Frank Herbert", "1965", "412", false));
-myLibrary.push(addBookToLibrary("Hyperion", "Dan Simmons", "1989", "482", false));
-myLibrary.push(addBookToLibrary("Neuromancer", "William Gibson", "1984", "271", false));
+addBookToLibrary("The Hobbit", "J.R.R. Tolkien", "1937", "310", "No");
+addBookToLibrary("Dune", "Frank Herbert", "1965", "412", "No");
+addBookToLibrary("Hyperion", "Dan Simmons", "1989", "482", "No");
+addBookToLibrary("Neuromancer", "William Gibson", "1984", "271", "No");
 
 showBookTable();
