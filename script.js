@@ -9,6 +9,16 @@ class Book {
     this.read = read;
     this.index = generateBookIndex();
   }
+  toggleRead() {
+    switch (this.read) {
+      case "Yes":
+        this.read = "No";
+        break;
+      case "No":
+        this.read = "Yes";
+        break;
+    }
+  }
 }
 
 function generateBookIndex() {
@@ -23,16 +33,7 @@ function addBookToLibrary(title, author, year, pages, read) {
   myLibrary.push(new Book(title, author, year, pages, read));
 }
 
-Book.prototype.toggleRead = function () {
-  switch (this.read) {
-    case "Yes":
-      this.read = "No";
-      break;
-    case "No":
-      this.read = "Yes";
-      break;
-  }
-};
+
 
 function renderBookCard(book) {
   let bookTable = document.getElementById("book-table");
