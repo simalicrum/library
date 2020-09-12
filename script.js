@@ -1,12 +1,14 @@
 let myLibrary = [];
 
-function Book(title, author, year, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.year = year;
-  this.pages = pages;
-  this.read = read;
-  this.index = generateBookIndex();
+class Book {
+  constructor(title, author, year, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.year = year;
+    this.pages = pages;
+    this.read = read;
+    this.index = generateBookIndex();
+  }
 }
 
 function generateBookIndex() {
